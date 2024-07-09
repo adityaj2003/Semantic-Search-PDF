@@ -1,0 +1,392 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C7383AFD2C3D9E5700888E7C /* MiniLM-V6.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = C7383AFC2C3D9E5700888E7C /* MiniLM-V6.mlpackage */; };
+		C7383AFF2C3DA82600888E7C /* PDFKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7383AFE2C3DA82600888E7C /* PDFKitView.swift */; };
+		C7383B012C3DB5F300888E7C /* SidePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7383B002C3DB5F300888E7C /* SidePanel.swift */; };
+		C7833D1E2C3D94ED005C66A1 /* Semantic_Search_PDFApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7833D1D2C3D94ED005C66A1 /* Semantic_Search_PDFApp.swift */; };
+		C7833D202C3D94ED005C66A1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7833D1F2C3D94ED005C66A1 /* ContentView.swift */; };
+		C7833D222C3D94F2005C66A1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7833D212C3D94F2005C66A1 /* Assets.xcassets */; };
+		C7833D252C3D94F2005C66A1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7833D242C3D94F2005C66A1 /* Preview Assets.xcassets */; };
+		C7833D2F2C3D9565005C66A1 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7833D2E2C3D9565005C66A1 /* SwiftUI.framework */; };
+		C7833D312C3D956D005C66A1 /* CoreML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7833D302C3D956D005C66A1 /* CoreML.framework */; };
+		C7833D332C3D960D005C66A1 /* PDFKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7833D322C3D960D005C66A1 /* PDFKit.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		C7383AFC2C3D9E5700888E7C /* MiniLM-V6.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; name = "MiniLM-V6.mlpackage"; path = "../../MiniLM-V6.mlpackage"; sourceTree = "<group>"; };
+		C7383AFE2C3DA82600888E7C /* PDFKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFKitView.swift; sourceTree = "<group>"; };
+		C7383B002C3DB5F300888E7C /* SidePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidePanel.swift; sourceTree = "<group>"; };
+		C7833D1A2C3D94ED005C66A1 /* Semantic Search PDF.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Semantic Search PDF.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7833D1D2C3D94ED005C66A1 /* Semantic_Search_PDFApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Semantic_Search_PDFApp.swift; sourceTree = "<group>"; };
+		C7833D1F2C3D94ED005C66A1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		C7833D212C3D94F2005C66A1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C7833D242C3D94F2005C66A1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		C7833D262C3D94F2005C66A1 /* Semantic_Search_PDF.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Semantic_Search_PDF.entitlements; sourceTree = "<group>"; };
+		C7833D2C2C3D951D005C66A1 /* Semantic-Search-PDF-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Semantic-Search-PDF-Info.plist"; sourceTree = SOURCE_ROOT; };
+		C7833D2E2C3D9565005C66A1 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		C7833D302C3D956D005C66A1 /* CoreML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreML.framework; path = System/Library/Frameworks/CoreML.framework; sourceTree = SDKROOT; };
+		C7833D322C3D960D005C66A1 /* PDFKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PDFKit.framework; path = System/Library/Frameworks/PDFKit.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C7833D172C3D94ED005C66A1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7833D312C3D956D005C66A1 /* CoreML.framework in Frameworks */,
+				C7833D332C3D960D005C66A1 /* PDFKit.framework in Frameworks */,
+				C7833D2F2C3D9565005C66A1 /* SwiftUI.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C7833D112C3D94ED005C66A1 = {
+			isa = PBXGroup;
+			children = (
+				C7833D1C2C3D94ED005C66A1 /* Semantic Search PDF */,
+				C7833D1B2C3D94ED005C66A1 /* Products */,
+				C7833D2D2C3D9565005C66A1 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		C7833D1B2C3D94ED005C66A1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C7833D1A2C3D94ED005C66A1 /* Semantic Search PDF.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C7833D1C2C3D94ED005C66A1 /* Semantic Search PDF */ = {
+			isa = PBXGroup;
+			children = (
+				C7833D2C2C3D951D005C66A1 /* Semantic-Search-PDF-Info.plist */,
+				C7833D1D2C3D94ED005C66A1 /* Semantic_Search_PDFApp.swift */,
+				C7833D1F2C3D94ED005C66A1 /* ContentView.swift */,
+				C7383B002C3DB5F300888E7C /* SidePanel.swift */,
+				C7833D212C3D94F2005C66A1 /* Assets.xcassets */,
+				C7833D262C3D94F2005C66A1 /* Semantic_Search_PDF.entitlements */,
+				C7383AFC2C3D9E5700888E7C /* MiniLM-V6.mlpackage */,
+				C7833D232C3D94F2005C66A1 /* Preview Content */,
+				C7383AFE2C3DA82600888E7C /* PDFKitView.swift */,
+			);
+			path = "Semantic Search PDF";
+			sourceTree = "<group>";
+		};
+		C7833D232C3D94F2005C66A1 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				C7833D242C3D94F2005C66A1 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		C7833D2D2C3D9565005C66A1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C7833D322C3D960D005C66A1 /* PDFKit.framework */,
+				C7833D302C3D956D005C66A1 /* CoreML.framework */,
+				C7833D2E2C3D9565005C66A1 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C7833D192C3D94ED005C66A1 /* Semantic Search PDF */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C7833D292C3D94F2005C66A1 /* Build configuration list for PBXNativeTarget "Semantic Search PDF" */;
+			buildPhases = (
+				C7833D162C3D94ED005C66A1 /* Sources */,
+				C7833D172C3D94ED005C66A1 /* Frameworks */,
+				C7833D182C3D94ED005C66A1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Semantic Search PDF";
+			productName = "Semantic Search PDF";
+			productReference = C7833D1A2C3D94ED005C66A1 /* Semantic Search PDF.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C7833D122C3D94ED005C66A1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					C7833D192C3D94ED005C66A1 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = C7833D152C3D94ED005C66A1 /* Build configuration list for PBXProject "Semantic Search PDF" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C7833D112C3D94ED005C66A1;
+			productRefGroup = C7833D1B2C3D94ED005C66A1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C7833D192C3D94ED005C66A1 /* Semantic Search PDF */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C7833D182C3D94ED005C66A1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7833D252C3D94F2005C66A1 /* Preview Assets.xcassets in Resources */,
+				C7833D222C3D94F2005C66A1 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C7833D162C3D94ED005C66A1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7383AFF2C3DA82600888E7C /* PDFKitView.swift in Sources */,
+				C7383B012C3DB5F300888E7C /* SidePanel.swift in Sources */,
+				C7833D202C3D94ED005C66A1 /* ContentView.swift in Sources */,
+				C7833D1E2C3D94ED005C66A1 /* Semantic_Search_PDFApp.swift in Sources */,
+				C7383AFD2C3D9E5700888E7C /* MiniLM-V6.mlpackage in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		C7833D272C3D94F2005C66A1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		C7833D282C3D94F2005C66A1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		C7833D2A2C3D94F2005C66A1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Semantic Search PDF/Semantic_Search_PDF.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Semantic Search PDF/Preview Content\"";
+				DEVELOPMENT_TEAM = 283664QQ23;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Semantic-Search-PDF-Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "adityaj2003.Semantic-Search-PDF";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		C7833D2B2C3D94F2005C66A1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Semantic Search PDF/Semantic_Search_PDF.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Semantic Search PDF/Preview Content\"";
+				DEVELOPMENT_TEAM = 283664QQ23;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Semantic-Search-PDF-Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "adityaj2003.Semantic-Search-PDF";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C7833D152C3D94ED005C66A1 /* Build configuration list for PBXProject "Semantic Search PDF" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7833D272C3D94F2005C66A1 /* Debug */,
+				C7833D282C3D94F2005C66A1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C7833D292C3D94F2005C66A1 /* Build configuration list for PBXNativeTarget "Semantic Search PDF" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7833D2A2C3D94F2005C66A1 /* Debug */,
+				C7833D2B2C3D94F2005C66A1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C7833D122C3D94ED005C66A1 /* Project object */;
+}
