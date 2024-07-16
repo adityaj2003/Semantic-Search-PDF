@@ -24,7 +24,7 @@ class BertTokenizer {
     init() {
         var url : URL?
         if let downloadsDirectory = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first {
-            url = downloadsDirectory.appendingPathComponent("Vocab.txt")
+            url = downloadsDirectory.appendingPathComponent("vocab.txt")
         }
         else {
             print("Downloads directory not found")

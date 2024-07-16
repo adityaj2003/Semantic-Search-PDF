@@ -4,9 +4,10 @@ import PDFKit
 
 struct PDFKitView: NSViewRepresentable {
     let url: URL
+    let pdfView : PDFView = PDFView()
 
     func makeNSView(context: Context) -> PDFView {
-        let pdfView = PDFView()
+        pdfView.document = PDFDocument(url: url)
         pdfView.autoScales = true
         return pdfView
     }
@@ -19,5 +20,9 @@ struct PDFKitView: NSViewRepresentable {
         else {
             print("Nothing")
         }
+    }
+    
+    func getView() -> PDFView {
+        return pdfView;
     }
 }
