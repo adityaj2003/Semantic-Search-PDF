@@ -105,11 +105,6 @@ struct ContentView: View {
     }
 
     func adjustTokenIds(_ tokenIds: [Int]) -> [Int] {
-        if tokenIds.count < 1 {
-            return Array(tokenIds.prefix(1))
-        } else if tokenIds.count > 2 {
-            return Array(tokenIds.prefix(2))
-        }
         return tokenIds
     }
 
