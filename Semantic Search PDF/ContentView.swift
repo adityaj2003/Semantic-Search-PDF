@@ -63,7 +63,12 @@ struct ContentView: View {
                     }
                     .frame(width: geometry.size.width * 0.8) // Content area width
                 }
-
+                .toolbar {
+                }
+                .searchable(text: $searchText, prompt: "Search")
+                .onSubmit(of: .search) {
+                    fetchEmbeddings()
+                }
             }
         }
     
