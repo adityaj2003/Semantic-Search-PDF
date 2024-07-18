@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C7383AFD2C3D9E5700888E7C /* MiniLM-V6.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = C7383AFC2C3D9E5700888E7C /* MiniLM-V6.mlpackage */; };
 		C7383AFF2C3DA82600888E7C /* PDFKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7383AFE2C3DA82600888E7C /* PDFKitView.swift */; };
 		C7383B012C3DB5F300888E7C /* SidePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7383B002C3DB5F300888E7C /* SidePanel.swift */; };
 		C7383B032C3EA95700888E7C /* BERTTokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7383B022C3EA95700888E7C /* BERTTokenizer.swift */; };
@@ -18,10 +17,11 @@
 		C7833D2F2C3D9565005C66A1 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7833D2E2C3D9565005C66A1 /* SwiftUI.framework */; };
 		C7833D312C3D956D005C66A1 /* CoreML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7833D302C3D956D005C66A1 /* CoreML.framework */; };
 		C7833D332C3D960D005C66A1 /* PDFKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7833D322C3D960D005C66A1 /* PDFKit.framework */; };
+		C7ECFF012C4934D8009E5179 /* MiniLM-V6.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = C7ECFF002C4934D8009E5179 /* MiniLM-V6.mlpackage */; };
+		C7ECFF032C4973E2009E5179 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7ECFF022C4973E2009E5179 /* AppKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C7383AFC2C3D9E5700888E7C /* MiniLM-V6.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; name = "MiniLM-V6.mlpackage"; path = "../../MiniLM-V6.mlpackage"; sourceTree = "<group>"; };
 		C7383AFE2C3DA82600888E7C /* PDFKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFKitView.swift; sourceTree = "<group>"; };
 		C7383B002C3DB5F300888E7C /* SidePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidePanel.swift; sourceTree = "<group>"; };
 		C7383B022C3EA95700888E7C /* BERTTokenizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BERTTokenizer.swift; sourceTree = "<group>"; };
@@ -35,6 +35,8 @@
 		C7833D2E2C3D9565005C66A1 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		C7833D302C3D956D005C66A1 /* CoreML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreML.framework; path = System/Library/Frameworks/CoreML.framework; sourceTree = SDKROOT; };
 		C7833D322C3D960D005C66A1 /* PDFKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PDFKit.framework; path = System/Library/Frameworks/PDFKit.framework; sourceTree = SDKROOT; };
+		C7ECFF002C4934D8009E5179 /* MiniLM-V6.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; name = "MiniLM-V6.mlpackage"; path = "../../MiniLM-V6.mlpackage"; sourceTree = "<group>"; };
+		C7ECFF022C4973E2009E5179 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +45,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7833D312C3D956D005C66A1 /* CoreML.framework in Frameworks */,
+				C7ECFF032C4973E2009E5179 /* AppKit.framework in Frameworks */,
 				C7833D332C3D960D005C66A1 /* PDFKit.framework in Frameworks */,
 				C7833D2F2C3D9565005C66A1 /* SwiftUI.framework in Frameworks */,
 			);
@@ -74,11 +77,11 @@
 				C7383B022C3EA95700888E7C /* BERTTokenizer.swift */,
 				C7833D2C2C3D951D005C66A1 /* Semantic-Search-PDF-Info.plist */,
 				C7833D1D2C3D94ED005C66A1 /* Semantic_Search_PDFApp.swift */,
+				C7ECFF002C4934D8009E5179 /* MiniLM-V6.mlpackage */,
 				C7833D1F2C3D94ED005C66A1 /* ContentView.swift */,
 				C7383B002C3DB5F300888E7C /* SidePanel.swift */,
 				C7833D212C3D94F2005C66A1 /* Assets.xcassets */,
 				C7833D262C3D94F2005C66A1 /* Semantic_Search_PDF.entitlements */,
-				C7383AFC2C3D9E5700888E7C /* MiniLM-V6.mlpackage */,
 				C7833D232C3D94F2005C66A1 /* Preview Content */,
 				C7383AFE2C3DA82600888E7C /* PDFKitView.swift */,
 			);
@@ -96,6 +99,7 @@
 		C7833D2D2C3D9565005C66A1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C7ECFF022C4973E2009E5179 /* AppKit.framework */,
 				C7833D322C3D960D005C66A1 /* PDFKit.framework */,
 				C7833D302C3D956D005C66A1 /* CoreML.framework */,
 				C7833D2E2C3D9565005C66A1 /* SwiftUI.framework */,
@@ -178,7 +182,7 @@
 				C7383B012C3DB5F300888E7C /* SidePanel.swift in Sources */,
 				C7833D202C3D94ED005C66A1 /* ContentView.swift in Sources */,
 				C7833D1E2C3D94ED005C66A1 /* Semantic_Search_PDFApp.swift in Sources */,
-				C7383AFD2C3D9E5700888E7C /* MiniLM-V6.mlpackage in Sources */,
+				C7ECFF012C4934D8009E5179 /* MiniLM-V6.mlpackage in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
