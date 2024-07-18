@@ -3,36 +3,48 @@ import PDFKit
 import CoreML
 import AppKit
 
+extension View {
+    @ViewBuilder func isHidden(_ isHidden: Bool) -> some View {
+        if isHidden {
+            self.hidden()
+        } else {
+            self
+        }
+    }
+}
 struct ContentView: View {
+    
     @State private var searchText = ""
     @State private var embeddingsWithPositions: [EmbeddingWithPosition] = []
     @State private var pdfTextWithPosition: [TextWithPosition] = []
     @State private var pdfKitView: PDFKitView?
     @State private var topMatches: [EmbeddingWithPosition] = []
     @State private var selectedMatch: EmbeddingWithPosition?
+    @State var isHidden : Bool = true
     
         var body: some View {
             GeometryReader { geometry in
                 NavigationSplitView {
+                    ProgressView().isHidden(isHidden)
                     List {
                         ForEach(topMatches, id: \.position.text) { match in
                             Button(action: {
                                 selectedMatch = match
                                 highlightSelectedMatch(match: match, pdfView: pdfKitView?.getView())
                             }) {
-                                HStack {
-                                    VStack(alignment: .leading) {
-                                        Text(match.position.text)
-                                            .font(.headline)
-                                            .lineLimit(2)
-                                        Text("Page \(match.position.pageNumber + 1)")
-                                            .font(.subheadline)
-                                    }
-                                    Spacer()
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Page \(match.position.pageNumber + 1)")
+                                        .font(.subheadline)
+                                        .foregroundColor(.gray)
+                                    Text(match.position.text)
+                                        .font(.headline)
+                                        .lineLimit(2)
                                 }
                                 .padding()
+                                .cornerRadius(8)
                             }
                             .buttonStyle(PlainButtonStyle())
+                            Divider()
                         }
                     }
                     .frame(width: geometry.size.width * 0.2)
@@ -54,7 +66,6 @@ struct ContentView: View {
                                         let newPDFKitView = PDFKitView(url: pdfURL)
                                         pdfKitView = newPDFKitView
                                         pdfTextWithPosition = extractTextWithPosition(from: pdfURL)
-                                        highlightTopMatches(pdfView: newPDFKitView.getView())
                                     }
                             }
                         } else {
@@ -65,9 +76,13 @@ struct ContentView: View {
                 }
                 .toolbar {
                 }
+                
                 .searchable(text: $searchText, prompt: "Search")
                 .onSubmit(of: .search) {
-                    fetchEmbeddings()
+                    print("Fetched")
+                    DispatchQueue.global(qos: .userInteractive).async {
+                        fetchEmbeddings()
+                    }
                 }
             }
         }
@@ -205,6 +220,7 @@ struct ContentView: View {
                     page.addAnnotation(highlight)
                 }
             }
+            isHidden = true
         } catch {
             print("Failed to get prediction: \(error)")
         }
@@ -215,6 +231,7 @@ struct ContentView: View {
     
 
     func fetchEmbeddings() {
+        isHidden = false
         if let document = pdfKitView?.getView().document {
             for i in 0..<document.pageCount {
                 if let page = document.page(at: i) {
