@@ -119,9 +119,6 @@ struct ContentView: View {
         return embeddingsWithPositions
     }
     
-    func adjustTokenIds(_ tokenIds: [Int]) -> [Int] {
-        return tokenIds
-    }
     
     func normalizeEmbedding(_ embedding: [Double]) -> [Double] {
         let norm = sqrt(embedding.reduce(0) { $0 + $1 * $1 })
@@ -180,21 +177,18 @@ struct ContentView: View {
         let attentionMask = Array(repeating: 1, count: tokenIds.count)
         let tokenTypeIds = Array(repeating: 0, count: tokenIds.count)
         
-        let adjustedTokenIds = adjustTokenIds(tokenIds)
-        let adjustedAttentionMask = Array(repeating: 1, count: adjustedTokenIds.count)
-        let adjustedTokenTypeIds = Array(repeating: 0, count: adjustedTokenIds.count)
         
-        guard let inputIdsArray = try? MLMultiArray(shape: [1, NSNumber(value: adjustedTokenIds.count)], dataType: .int32),
-              let attentionMaskArray = try? MLMultiArray(shape: [1, NSNumber(value: adjustedTokenIds.count)], dataType: .int32),
-              let tokenTypeIdsArray = try? MLMultiArray(shape: [1, NSNumber(value: adjustedTokenIds.count)], dataType: .int32) else {
+        guard let inputIdsArray = try? MLMultiArray(shape: [1, NSNumber(value: tokenIds.count)], dataType: .int32),
+              let attentionMaskArray = try? MLMultiArray(shape: [1, NSNumber(value: tokenIds.count)], dataType: .int32),
+              let tokenTypeIdsArray = try? MLMultiArray(shape: [1, NSNumber(value: tokenIds.count)], dataType: .int32) else {
             print("Failed to create MLMultiArray")
             return
         }
         
-        for (index, tokenId) in adjustedTokenIds.enumerated() {
+        for (index, tokenId) in tokenIds.enumerated() {
             inputIdsArray[index] = NSNumber(value: tokenId)
-            attentionMaskArray[index] = NSNumber(value: adjustedAttentionMask[index])
-            tokenTypeIdsArray[index] = NSNumber(value: adjustedTokenTypeIds[index])
+            attentionMaskArray[index] = NSNumber(value: attentionMask[index])
+            tokenTypeIdsArray[index] = NSNumber(value: tokenTypeIds[index])
         }
         
         let input = MiniLM_V6Input(input_ids: inputIdsArray, attention_mask: attentionMaskArray, token_type_ids: tokenTypeIdsArray)
