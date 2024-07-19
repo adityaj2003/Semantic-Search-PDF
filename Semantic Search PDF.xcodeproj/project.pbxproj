@@ -7,9 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C71CDBFE2C49D87D008CDBA4 /* MenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71CDBFD2C49D87D008CDBA4 /* MenuBar.swift */; };
 		C7383AFF2C3DA82600888E7C /* PDFKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7383AFE2C3DA82600888E7C /* PDFKitView.swift */; };
-		C7383B012C3DB5F300888E7C /* SidePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7383B002C3DB5F300888E7C /* SidePanel.swift */; };
 		C7383B032C3EA95700888E7C /* BERTTokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7383B022C3EA95700888E7C /* BERTTokenizer.swift */; };
 		C7833D1E2C3D94ED005C66A1 /* Semantic_Search_PDFApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7833D1D2C3D94ED005C66A1 /* Semantic_Search_PDFApp.swift */; };
 		C7833D202C3D94ED005C66A1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7833D1F2C3D94ED005C66A1 /* ContentView.swift */; };
@@ -23,9 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C71CDBFD2C49D87D008CDBA4 /* MenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBar.swift; sourceTree = "<group>"; };
 		C7383AFE2C3DA82600888E7C /* PDFKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFKitView.swift; sourceTree = "<group>"; };
-		C7383B002C3DB5F300888E7C /* SidePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidePanel.swift; sourceTree = "<group>"; };
 		C7383B022C3EA95700888E7C /* BERTTokenizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BERTTokenizer.swift; sourceTree = "<group>"; };
 		C7833D1A2C3D94ED005C66A1 /* Semantic Search PDF.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Semantic Search PDF.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7833D1D2C3D94ED005C66A1 /* Semantic_Search_PDFApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Semantic_Search_PDFApp.swift; sourceTree = "<group>"; };
@@ -59,7 +55,6 @@
 		C7833D112C3D94ED005C66A1 = {
 			isa = PBXGroup;
 			children = (
-				C71CDBFD2C49D87D008CDBA4 /* MenuBar.swift */,
 				C7833D1C2C3D94ED005C66A1 /* Semantic Search PDF */,
 				C7833D1B2C3D94ED005C66A1 /* Products */,
 				C7833D2D2C3D9565005C66A1 /* Frameworks */,
@@ -82,7 +77,6 @@
 				C7833D1D2C3D94ED005C66A1 /* Semantic_Search_PDFApp.swift */,
 				C7ECFF002C4934D8009E5179 /* MiniLM-V6.mlpackage */,
 				C7833D1F2C3D94ED005C66A1 /* ContentView.swift */,
-				C7383B002C3DB5F300888E7C /* SidePanel.swift */,
 				C7833D212C3D94F2005C66A1 /* Assets.xcassets */,
 				C7833D262C3D94F2005C66A1 /* Semantic_Search_PDF.entitlements */,
 				C7833D232C3D94F2005C66A1 /* Preview Content */,
@@ -182,10 +176,8 @@
 			files = (
 				C7383B032C3EA95700888E7C /* BERTTokenizer.swift in Sources */,
 				C7383AFF2C3DA82600888E7C /* PDFKitView.swift in Sources */,
-				C7383B012C3DB5F300888E7C /* SidePanel.swift in Sources */,
 				C7833D202C3D94ED005C66A1 /* ContentView.swift in Sources */,
 				C7833D1E2C3D94ED005C66A1 /* Semantic_Search_PDFApp.swift in Sources */,
-				C71CDBFE2C49D87D008CDBA4 /* MenuBar.swift in Sources */,
 				C7ECFF012C4934D8009E5179 /* MiniLM-V6.mlpackage in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
