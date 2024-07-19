@@ -12,16 +12,22 @@ extension View {
         }
     }
 }
+@available(macOS 14.0, *)
 struct ContentView: View {
-    
+    @State var selectedFileURL: URL?
+    @Binding var isFileImporterPresented: Bool
     @State private var searchText = ""
     @State private var embeddingsWithPositions: [EmbeddingWithPosition] = []
     @State private var pdfTextWithPosition: [TextWithPosition] = []
     @State private var pdfKitView: PDFKitView?
     @State private var topMatches: [EmbeddingWithPosition] = []
     @State private var selectedMatch: EmbeddingWithPosition?
+    @State private var isSearching = false
     @State var isHidden : Bool = true
     
+    init(isFileImporterPresented: Binding<Bool>) {
+        _isFileImporterPresented = isFileImporterPresented
+    }
         var body: some View {
             GeometryReader { geometry in
                 NavigationSplitView {
@@ -50,9 +56,7 @@ struct ContentView: View {
                     .frame(width: geometry.size.width * 0.2)
                 } detail: {
                     VStack {
-                        if let downloadsDirectory = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first {
-                            let pdfURL = downloadsDirectory.appendingPathComponent("ADC_GUI_Docs.pdf")
-
+                        if let pdfURL = selectedFileURL {
                             if let pdfKitView = pdfKitView {
                                 pdfKitView
                                     .edgesIgnoringSafeArea(.all)
@@ -75,15 +79,41 @@ struct ContentView: View {
                     .frame(width: geometry.size.width * 0.8) // Content area width
                 }
                 .toolbar {
+                    
                 }
                 
-                .searchable(text: $searchText, prompt: "Search")
+                .searchable(text: $searchText, isPresented: $isSearching, prompt: "Search")
+                .background(Button("", action: { isSearching = true }).keyboardShortcut("f").hidden())
                 .onSubmit(of: .search) {
-                    print("Fetched")
                     DispatchQueue.global(qos: .userInteractive).async {
-                        fetchEmbeddings()
+                            fetchEmbeddings {
+                                DispatchQueue.main.async {
+                                    isHidden = true
+                                    highlightTopMatches(pdfView: pdfKitView?.getView())
+                                }
+                            }
+                        }
+                }.fileImporter(isPresented: $isFileImporterPresented, allowedContentTypes: [.pdf]) { result in
+                    switch result {
+                    case .success(let url):
+                        selectedFileURL = url
+                    case .failure(let error):
+                        print("Error selecting file: \(error.localizedDescription)")
                     }
                 }
+                .onChange(of: selectedFileURL) { newURL in
+                                if let pdfURL = newURL {
+                                    pdfKitView = PDFKitView(url: pdfURL)
+                                    pdfTextWithPosition = extractTextWithPosition(from: pdfURL)
+                                    highlightTopMatches(pdfView: pdfKitView?.getView())
+                                    embeddingsWithPositions = []
+                                    pdfTextWithPosition = []
+                                    topMatches = []
+                                    pdfTextWithPosition = extractTextWithPosition(from:  pdfURL)
+                                }
+                    
+                    
+                            }
             }
         }
     
@@ -140,15 +170,46 @@ struct ContentView: View {
         return embedding.map { $0 / norm }
     }
     
+    
+    func splitTextIntoSentences(text: String) -> [String] {
+        let pattern = "(?<!\\b[A-Z]\\.|Mr\\.|Mrs\\.|Ms\\.|Dr\\.|\\d\\.\\d)\\s*[\\.\\!\\?]\\s+"
+        var sentences: [String] = []
+        do {
+            let regex = try NSRegularExpression(pattern: pattern, options: [])
+            let matches = regex.matches(in: text, options: [], range: NSRange(location: 0, length: text.utf16.count))
+            
+            var lastRangeEnd = text.startIndex
+            for match in matches {
+                let range = Range(match.range(at: 0), in: text)!
+                let sentence = text[lastRangeEnd..<range.lowerBound].trimmingCharacters(in: .whitespacesAndNewlines)
+                if !sentence.isEmpty {
+                    sentences.append(String(sentence))
+                }
+                lastRangeEnd = range.upperBound
+            }
+            
+            // Add the last sentence
+            let lastSentence = text[lastRangeEnd..<text.endIndex].trimmingCharacters(in: .whitespacesAndNewlines)
+            if !lastSentence.isEmpty {
+                sentences.append(String(lastSentence))
+            }
+        } catch {
+            print("Invalid regex pattern")
+        }
+        
+        return sentences
+    }
+
+    // Example usage in your extractTextWithPosition function
     func extractTextWithPosition(from url: URL) -> [TextWithPosition] {
         guard let pdfDocument = PDFDocument(url: url) else { return [] }
         var textWithPositions: [TextWithPosition] = []
-        
+
         for pageIndex in 0..<pdfDocument.pageCount {
             guard let page = pdfDocument.page(at: pageIndex) else { continue }
-            
+
             if let pageText = page.string {
-                let sentences = pageText.split(separator: ".").map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
+                let sentences = splitTextIntoSentences(text: pageText)
                 for sentence in sentences {
                     if let selection = page.selection(for: NSRange(location: pageText.distance(from: pageText.startIndex, to: pageText.range(of: sentence)!.lowerBound), length: sentence.count)), selection.string!.count > 5 {
                         let bounds = selection.bounds(for: page)
@@ -162,7 +223,7 @@ struct ContentView: View {
                 }
             }
         }
-        
+
         return textWithPositions
     }
     
@@ -211,45 +272,44 @@ struct ContentView: View {
         do {
             let prediction = try model.prediction(input: input)
             let queryEmbedding = (0..<prediction.Identity.count).map { prediction.Identity[$0].doubleValue }
-            topMatches = findTopNSimilarEmbeddings(queryEmbedding: queryEmbedding, sentenceEmbeddings: embeddingsWithPositions, topN: 5)
-            for match in topMatches {
+            let matches = findTopNSimilarEmbeddings(queryEmbedding: queryEmbedding, sentenceEmbeddings: embeddingsWithPositions, topN: 5)
+            for match in matches {
                 let highlight = PDFAnnotation(bounds: match.position.bounds, forType: .highlight, withProperties: nil)
                 highlight.color = .yellow
                 
                 if let page = pdfView?.document?.page(at: match.position.pageNumber) {
                     page.addAnnotation(highlight)
+                    print("highlighting")
                 }
             }
             isHidden = true
+            topMatches = matches
         } catch {
             print("Failed to get prediction: \(error)")
         }
     }
     func highlightSelectedMatch(match: EmbeddingWithPosition, pdfView: PDFView?) {
-        pdfView?.go(to: match.position.bounds, on: (pdfView?.document?.page(at: match.position.pageNumber))!)
+        guard let pdfView = pdfView,
+              let document = pdfView.document,
+              let page = document.page(at: match.position.pageNumber) else {
+            print("Failed to highlight match: PDFView, document, or page is nil")
+            return
+        }
+        pdfView.go(to: match.position.bounds, on: page)
     }
     
 
-    func fetchEmbeddings() {
-        isHidden = false
-        if let document = pdfKitView?.getView().document {
-            for i in 0..<document.pageCount {
-                if let page = document.page(at: i) {
-                    let annotations = page.annotations
-                    for annotation in annotations {
-                        page.removeAnnotation(annotation)
-                    }
-                }
-            }
-        }
+    func fetchEmbeddings(completion: @escaping () -> Void) {
         let tokenizer = BertTokenizer()
-        
+
         guard let model = try? MiniLM_V6(configuration: .init()) else {
             print("Failed to load model")
+            completion()
             return
         }
-        
+
         embeddingsWithPositions = tokenizeAndEmbed(textChunks: pdfTextWithPosition, tokenizer: tokenizer, model: model)
-        highlightTopMatches(pdfView: pdfKitView?.getView())
+        completion()
     }
+
 }

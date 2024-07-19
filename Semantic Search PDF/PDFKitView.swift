@@ -13,7 +13,6 @@ struct PDFKitView: NSViewRepresentable {
     }
 
     func updateNSView(_ pdfView: PDFView, context: Context) {
-        print(url)
         if let document = PDFDocument(url: url) {
             pdfView.document = document
         }
