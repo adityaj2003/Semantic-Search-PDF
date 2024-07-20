@@ -24,13 +24,15 @@ struct ContentView: View {
     @State private var selectedMatch: EmbeddingWithPosition?
     @State private var isSearching = false
     @State var isHidden : Bool = true
-    
+    @State var isHiddenText : Bool = false
+    @State var indexedPages : Int = 0
     init(isFileImporterPresented: Binding<Bool>) {
         _isFileImporterPresented = isFileImporterPresented
     }
         var body: some View {
             GeometryReader { geometry in
                 NavigationSplitView {
+                    Text("Pages Indexed: \(indexedPages)").isHidden(isHiddenText)
                     ProgressView().isHidden(isHidden)
                     List {
                         ForEach(topMatches, id: \.position.text) { match in
@@ -60,17 +62,9 @@ struct ContentView: View {
                             if let pdfKitView = pdfKitView {
                                 pdfKitView
                                     .edgesIgnoringSafeArea(.all)
-                                    .onAppear {
-                                        pdfTextWithPosition = extractTextWithPosition(from: pdfURL)
-                                    }
                             } else {
                                 PDFKitView(url: pdfURL)
                                     .edgesIgnoringSafeArea(.all)
-                                    .onAppear {
-                                        let newPDFKitView = PDFKitView(url: pdfURL)
-                                        pdfKitView = newPDFKitView
-                                        pdfTextWithPosition = extractTextWithPosition(from: pdfURL)
-                                    }
                             }
                         } else {
                             Text("PDF not found")
@@ -86,13 +80,9 @@ struct ContentView: View {
                 .background(Button("", action: { isSearching = true }).keyboardShortcut("f").hidden())
                 .onSubmit(of: .search) {
                     isHidden = false
-                    DispatchQueue.global(qos: .userInteractive).async {
-                            fetchEmbeddings {
-                                DispatchQueue.main.async {
-                                    highlightTopMatches(pdfView: pdfKitView?.getView())
-                                }
-                            }
-                        }
+                    DispatchQueue.main.async {
+                            highlightTopMatches(pdfView: pdfKitView?.getView())
+                    }
                 }.fileImporter(isPresented: $isFileImporterPresented, allowedContentTypes: [.pdf]) { result in
                     switch result {
                     case .success(let url):
@@ -103,13 +93,17 @@ struct ContentView: View {
                 }
                 .onChange(of: selectedFileURL) { newURL in
                                 if let pdfURL = newURL {
+                                    indexedPages = 0
                                     pdfKitView = PDFKitView(url: pdfURL)
-                                    pdfTextWithPosition = extractTextWithPosition(from: pdfURL)
-                                    highlightTopMatches(pdfView: pdfKitView?.getView())
-                                    embeddingsWithPositions = []
-                                    pdfTextWithPosition = []
-                                    topMatches = []
-                                    pdfTextWithPosition = extractTextWithPosition(from:  pdfURL)
+                                    DispatchQueue.global(qos: .userInteractive).async{
+                           
+                                        highlightTopMatches(pdfView: pdfKitView?.getView())
+                                        embeddingsWithPositions = []
+                                        pdfTextWithPosition = []
+                                        topMatches = []
+                                        isHiddenText = false
+                                        pdfTextWithPosition = extractTextWithPosition(from:  pdfURL)
+                                    }
                                 }
                     
                     
@@ -132,6 +126,7 @@ struct ContentView: View {
         var embeddingsWithPositions: [EmbeddingWithPosition] = []
         
         for chunk in textChunks {
+            indexedPages = chunk.pageNumber
             var tokenIds = tokenizer.tokenizeToIds(text: chunk.text)
             var attentionMask = Array(repeating: 1, count: tokenIds.count)
             var tokenTypeIds = Array(repeating: 0, count: tokenIds.count)
@@ -157,6 +152,7 @@ struct ContentView: View {
                 let normalizedEmbedding = normalizeEmbedding(embedding)
                 let embeddingWithPosition = EmbeddingWithPosition(embedding: normalizedEmbedding, position: chunk)
                 embeddingsWithPositions.append(embeddingWithPosition)
+                
             } catch {
                 print("Failed to get Embeddings: \(error)")
             }
@@ -223,7 +219,13 @@ struct ContentView: View {
                 }
             }
         }
-
+        let tokenizer = BertTokenizer()
+        guard let model = try? MiniLM_V6(configuration: .init()) else {
+            print("Failed to load model")
+            return textWithPositions
+        }
+        embeddingsWithPositions = tokenizeAndEmbed(textChunks: textWithPositions, tokenizer: tokenizer, model: model)
+        isHiddenText = true
         return textWithPositions
     }
     
@@ -297,18 +299,5 @@ struct ContentView: View {
         pdfView.go(to: match.position.bounds, on: page)
     }
     
-
-    func fetchEmbeddings(completion: @escaping () -> Void) {
-        let tokenizer = BertTokenizer()
-
-        guard let model = try? MiniLM_V6(configuration: .init()) else {
-            print("Failed to load model")
-            completion()
-            return
-        }
-
-        embeddingsWithPositions = tokenizeAndEmbed(textChunks: pdfTextWithPosition, tokenizer: tokenizer, model: model)
-        completion()
-    }
 
 }
