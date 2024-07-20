@@ -60,13 +60,15 @@ class BertTokenizer {
             throw TokenizerError.tooLong(
                 """
                 Token indices sequence length is longer than the specified maximum
-                sequence length for this BERT model (\(tokens.count) > \(maxLen). Running this
-                sequence through BERT will result in indexing errors".format(len(ids), self.max_len)
+                sequence length for this BERT model (\(tokens.count) > \(maxLen)). Running this
+                sequence through BERT will result in indexing errors.
                 """
             )
         }
-        return tokens.map { vocab[$0]! }
+        
+        return tokens.compactMap { vocab[$0] }
     }
+
     
     /// Main entry point
     func tokenizeToIds(text: String) -> [Int] {

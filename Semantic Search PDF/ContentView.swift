@@ -85,10 +85,10 @@ struct ContentView: View {
                 .searchable(text: $searchText, isPresented: $isSearching, prompt: "Search")
                 .background(Button("", action: { isSearching = true }).keyboardShortcut("f").hidden())
                 .onSubmit(of: .search) {
+                    isHidden = false
                     DispatchQueue.global(qos: .userInteractive).async {
                             fetchEmbeddings {
                                 DispatchQueue.main.async {
-                                    isHidden = true
                                     highlightTopMatches(pdfView: pdfKitView?.getView())
                                 }
                             }
@@ -211,7 +211,7 @@ struct ContentView: View {
             if let pageText = page.string {
                 let sentences = splitTextIntoSentences(text: pageText)
                 for sentence in sentences {
-                    if let selection = page.selection(for: NSRange(location: pageText.distance(from: pageText.startIndex, to: pageText.range(of: sentence)!.lowerBound), length: sentence.count)), selection.string!.count > 5 {
+                    if let selection = page.selection(for: NSRange(location: pageText.distance(from: pageText.startIndex, to: pageText.range(of: sentence)!.lowerBound), length: sentence.count)), selection.string!.count > 15 {
                         let bounds = selection.bounds(for: page)
                         let position = TextWithPosition(
                             text: sentence,
@@ -279,7 +279,6 @@ struct ContentView: View {
                 
                 if let page = pdfView?.document?.page(at: match.position.pageNumber) {
                     page.addAnnotation(highlight)
-                    print("highlighting")
                 }
             }
             isHidden = true

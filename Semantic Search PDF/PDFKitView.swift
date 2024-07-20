@@ -17,7 +17,6 @@ struct PDFKitView: NSViewRepresentable {
             pdfView.document = document
         }
         else {
-            print("Nothing")
         }
     }
     
