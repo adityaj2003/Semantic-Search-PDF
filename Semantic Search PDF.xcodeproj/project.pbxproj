@@ -56,6 +56,7 @@
 		C7833D112C3D94ED005C66A1 = {
 			isa = PBXGroup;
 			children = (
+				C77631312C4B9554005017AB /* README.md */,
 				C7833D1C2C3D94ED005C66A1 /* Semantic Search PDF */,
 				C7833D1B2C3D94ED005C66A1 /* Products */,
 				C7833D2D2C3D9565005C66A1 /* Frameworks */,
@@ -82,7 +83,6 @@
 				C7833D262C3D94F2005C66A1 /* Semantic_Search_PDF.entitlements */,
 				C7833D232C3D94F2005C66A1 /* Preview Content */,
 				C7383AFE2C3DA82600888E7C /* PDFKitView.swift */,
-				C77631312C4B9554005017AB /* README.md */,
 			);
 			path = "Semantic Search PDF";
 			sourceTree = "<group>";
