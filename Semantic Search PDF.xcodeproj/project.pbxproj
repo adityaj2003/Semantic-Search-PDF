@@ -23,6 +23,7 @@
 /* Begin PBXFileReference section */
 		C7383AFE2C3DA82600888E7C /* PDFKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFKitView.swift; sourceTree = "<group>"; };
 		C7383B022C3EA95700888E7C /* BERTTokenizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BERTTokenizer.swift; sourceTree = "<group>"; };
+		C77631312C4B9554005017AB /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		C7833D1A2C3D94ED005C66A1 /* Semantic Search PDF.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Semantic Search PDF.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7833D1D2C3D94ED005C66A1 /* Semantic_Search_PDFApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Semantic_Search_PDFApp.swift; sourceTree = "<group>"; };
 		C7833D1F2C3D94ED005C66A1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -81,6 +82,7 @@
 				C7833D262C3D94F2005C66A1 /* Semantic_Search_PDF.entitlements */,
 				C7833D232C3D94F2005C66A1 /* Preview Content */,
 				C7383AFE2C3DA82600888E7C /* PDFKitView.swift */,
+				C77631312C4B9554005017AB /* README.md */,
 			);
 			path = "Semantic Search PDF";
 			sourceTree = "<group>";
