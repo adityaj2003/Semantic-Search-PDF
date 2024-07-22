@@ -16,7 +16,7 @@ enum TokenizerError: Error {
 class BertTokenizer {
     private let basicTokenizer = BasicTokenizer()
     private let wordpieceTokenizer: WordpieceTokenizer
-    private let maxLen = 512
+    private let maxLen = 1024
     
     private let vocab: [String: Int]
     private let ids_to_tokens: [Int: String]

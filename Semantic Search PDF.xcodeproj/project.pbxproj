@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		C7383AFF2C3DA82600888E7C /* PDFKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7383AFE2C3DA82600888E7C /* PDFKitView.swift */; };
 		C7383B032C3EA95700888E7C /* BERTTokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7383B022C3EA95700888E7C /* BERTTokenizer.swift */; };
+		C77631462C4E5C2D005017AB /* Quantization.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77631452C4E5C2D005017AB /* Quantization.swift */; };
 		C7833D1E2C3D94ED005C66A1 /* Semantic_Search_PDFApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7833D1D2C3D94ED005C66A1 /* Semantic_Search_PDFApp.swift */; };
 		C7833D202C3D94ED005C66A1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7833D1F2C3D94ED005C66A1 /* ContentView.swift */; };
 		C7833D222C3D94F2005C66A1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7833D212C3D94F2005C66A1 /* Assets.xcassets */; };
@@ -24,6 +25,7 @@
 		C7383AFE2C3DA82600888E7C /* PDFKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFKitView.swift; sourceTree = "<group>"; };
 		C7383B022C3EA95700888E7C /* BERTTokenizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BERTTokenizer.swift; sourceTree = "<group>"; };
 		C77631312C4B9554005017AB /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		C77631452C4E5C2D005017AB /* Quantization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quantization.swift; sourceTree = "<group>"; };
 		C7833D1A2C3D94ED005C66A1 /* Semantic Search PDF.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Semantic Search PDF.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7833D1D2C3D94ED005C66A1 /* Semantic_Search_PDFApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Semantic_Search_PDFApp.swift; sourceTree = "<group>"; };
 		C7833D1F2C3D94ED005C66A1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 				C7833D262C3D94F2005C66A1 /* Semantic_Search_PDF.entitlements */,
 				C7833D232C3D94F2005C66A1 /* Preview Content */,
 				C7383AFE2C3DA82600888E7C /* PDFKitView.swift */,
+				C77631452C4E5C2D005017AB /* Quantization.swift */,
 			);
 			path = "Semantic Search PDF";
 			sourceTree = "<group>";
@@ -138,6 +141,7 @@
 				TargetAttributes = {
 					C7833D192C3D94ED005C66A1 = {
 						CreatedOnToolsVersion = 15.0;
+						LastSwiftMigration = 1500;
 					};
 				};
 			};
@@ -178,6 +182,7 @@
 			files = (
 				C7383B032C3EA95700888E7C /* BERTTokenizer.swift in Sources */,
 				C7383AFF2C3DA82600888E7C /* PDFKitView.swift in Sources */,
+				C77631462C4E5C2D005017AB /* Quantization.swift in Sources */,
 				C7833D202C3D94ED005C66A1 /* ContentView.swift in Sources */,
 				C7833D1E2C3D94ED005C66A1 /* Semantic_Search_PDFApp.swift in Sources */,
 				C7ECFF012C4934D8009E5179 /* MiniLM-V6.mlpackage in Sources */,
@@ -310,6 +315,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Semantic Search PDF/Semantic_Search_PDF.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
@@ -334,6 +340,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -343,6 +350,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Semantic Search PDF/Semantic_Search_PDF.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";

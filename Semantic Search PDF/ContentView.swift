@@ -21,7 +21,9 @@ struct ContentView: View {
     @State private var pdfTextWithPosition: [TextWithPosition] = []
     @State private var pdfKitView: PDFKitView?
     @State private var topMatches: [EmbeddingWithPosition] = []
+    @State private var quantizer = Quantizer(numSubspaces: 8, numClusters: 256, maxIterations: 100)
     @State private var selectedMatch: EmbeddingWithPosition?
+    
     @State private var isSearching = false
     @State var isHidden : Bool = true
     @State var isHiddenText : Bool = false
@@ -81,7 +83,7 @@ struct ContentView: View {
                 .onSubmit(of: .search) {
                     isHidden = false
                     DispatchQueue.main.async {
-                            highlightTopMatches(pdfView: pdfKitView?.getView())
+                        highlightTopMatches(pdfView: pdfKitView?.getView(), quantizer: quantizer)
                     }
                 }.fileImporter(isPresented: $isFileImporterPresented, allowedContentTypes: [.pdf]) { result in
                     switch result {
@@ -97,7 +99,7 @@ struct ContentView: View {
                                     pdfKitView = PDFKitView(url: pdfURL)
                                     DispatchQueue.global(qos: .userInteractive).async{
                            
-                                        highlightTopMatches(pdfView: pdfKitView?.getView())
+                                        highlightTopMatches(pdfView: pdfKitView?.getView(), quantizer: quantizer)
                                         embeddingsWithPositions = []
                                         pdfTextWithPosition = []
                                         topMatches = []
@@ -122,7 +124,7 @@ struct ContentView: View {
         let position: TextWithPosition
     }
     
-    func tokenizeAndEmbed(textChunks: [TextWithPosition], tokenizer: BertTokenizer, model: MiniLM_V6) -> [EmbeddingWithPosition] {
+    func tokenizeAndEmbed(textChunks: [TextWithPosition], tokenizer: BertTokenizer, model: MiniLM_V6, quantizer: Quantizer) -> [EmbeddingWithPosition] {
         var embeddingsWithPositions: [EmbeddingWithPosition] = []
         
         for chunk in textChunks {
@@ -150,9 +152,10 @@ struct ContentView: View {
                 let prediction = try model.prediction(input: input)
                 let embedding = (0..<prediction.Identity.count).map { prediction.Identity[$0].doubleValue }
                 let normalizedEmbedding = normalizeEmbedding(embedding)
-                let embeddingWithPosition = EmbeddingWithPosition(embedding: normalizedEmbedding, position: chunk)
+                let floatEmbedding = normalizedEmbedding.map { Float($0) }
+                let quantizedEmbedding = quantizer.quantizeEmbedding(embedding: floatEmbedding, centroids: quantizer.centroids)
+                let embeddingWithPosition = EmbeddingWithPosition(embedding: quantizedEmbedding.map { Double($0) }, position: chunk)
                 embeddingsWithPositions.append(embeddingWithPosition)
-                
             } catch {
                 print("Failed to get Embeddings: \(error)")
             }
@@ -224,7 +227,7 @@ struct ContentView: View {
             print("Failed to load model")
             return textWithPositions
         }
-        embeddingsWithPositions = tokenizeAndEmbed(textChunks: textWithPositions, tokenizer: tokenizer, model: model)
+        embeddingsWithPositions = tokenizeAndEmbed(textChunks: textWithPositions, tokenizer: tokenizer, model: model, quantizer: quantizer)
         isHiddenText = true
         return textWithPositions
     }
@@ -236,49 +239,52 @@ struct ContentView: View {
         return dotProduct / (magnitudeA * magnitudeB)
     }
     
-    func findTopNSimilarEmbeddings(queryEmbedding: [Double], sentenceEmbeddings: [EmbeddingWithPosition], topN: Int) -> [EmbeddingWithPosition] {
+    func findTopNSimilarEmbeddings(queryEmbedding: [Int], sentenceEmbeddings: [EmbeddingWithPosition], topN: Int) -> [EmbeddingWithPosition] {
         let similarities = sentenceEmbeddings.map { embeddingWithPosition in
-            return (embeddingWithPosition, cosineSimilarity(queryEmbedding, embeddingWithPosition.embedding))
+            return (embeddingWithPosition, cosineSimilarity(queryEmbedding.map { Double($0) }, embeddingWithPosition.embedding))
         }
         let sortedEmbeddings = similarities.sorted { $0.1 > $1.1 }.prefix(topN)
         return sortedEmbeddings.map { $0.0 }
     }
+
     
-    func highlightTopMatches(pdfView: PDFView?) {
+    func highlightTopMatches(pdfView: PDFView?, quantizer: Quantizer) {
         let tokenizer = BertTokenizer()
         guard let model = try? MiniLM_V6(configuration: .init()) else {
             print("Failed to load model")
             return
         }
-        
+
         let tokenIds = tokenizer.tokenizeToIds(text: searchText)
         let attentionMask = Array(repeating: 1, count: tokenIds.count)
         let tokenTypeIds = Array(repeating: 0, count: tokenIds.count)
-        
-        
+
         guard let inputIdsArray = try? MLMultiArray(shape: [1, NSNumber(value: tokenIds.count)], dataType: .int32),
               let attentionMaskArray = try? MLMultiArray(shape: [1, NSNumber(value: tokenIds.count)], dataType: .int32),
               let tokenTypeIdsArray = try? MLMultiArray(shape: [1, NSNumber(value: tokenIds.count)], dataType: .int32) else {
             print("Failed to create MLMultiArray")
             return
         }
-        
+
         for (index, tokenId) in tokenIds.enumerated() {
             inputIdsArray[index] = NSNumber(value: tokenId)
             attentionMaskArray[index] = NSNumber(value: attentionMask[index])
             tokenTypeIdsArray[index] = NSNumber(value: tokenTypeIds[index])
         }
-        
+
         let input = MiniLM_V6Input(input_ids: inputIdsArray, attention_mask: attentionMaskArray, token_type_ids: tokenTypeIdsArray)
-        
+
         do {
             let prediction = try model.prediction(input: input)
             let queryEmbedding = (0..<prediction.Identity.count).map { prediction.Identity[$0].doubleValue }
-            let matches = findTopNSimilarEmbeddings(queryEmbedding: queryEmbedding, sentenceEmbeddings: embeddingsWithPositions, topN: 5)
+            let normalizedQueryEmbedding = normalizeEmbedding(queryEmbedding)
+            let floatQueryEmbedding = normalizedQueryEmbedding.map { Float($0) } // Convert Double array to Float array
+            let quantizedQueryEmbedding = quantizer.quantize(embedding: floatQueryEmbedding)
+            let matches = findTopNSimilarEmbeddings(queryEmbedding: quantizedQueryEmbedding, sentenceEmbeddings: embeddingsWithPositions, topN: 5)
             for match in matches {
                 let highlight = PDFAnnotation(bounds: match.position.bounds, forType: .highlight, withProperties: nil)
                 highlight.color = .yellow
-                
+
                 if let page = pdfView?.document?.page(at: match.position.pageNumber) {
                     page.addAnnotation(highlight)
                 }
@@ -289,6 +295,10 @@ struct ContentView: View {
             print("Failed to get prediction: \(error)")
         }
     }
+
+
+    
+    
     func highlightSelectedMatch(match: EmbeddingWithPosition, pdfView: PDFView?) {
         guard let pdfView = pdfView,
               let document = pdfView.document,
