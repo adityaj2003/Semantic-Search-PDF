@@ -6,24 +6,24 @@ import CoreML
 import SwiftUI
 
 @available(macOS 14.0, *)
+
 @main
 struct Semantic_Search_PDFApp: App {
-    @State private var isFileImporterPresented = true
+    @StateObject private var viewModel = ViewModel()
 
     var body: some Scene {
         WindowGroup {
-            ContentView(isFileImporterPresented: $isFileImporterPresented)
+            ContentView(viewModel: viewModel)
         }.commands {
-            CommandGroup(replacing: CommandGroupPlacement.newItem) {Button("Open File...") {
-                isFileImporterPresented.toggle()
+            CommandGroup(replacing: CommandGroupPlacement.newItem) {
+                Button("Open File...") {
+                    viewModel.isFileImporterPresented.toggle()
+                }
+                .keyboardShortcut("O")
             }
-            .keyboardShortcut("O")}
         }
-        
     }
 }
-
-
 class ModelHandler {
     private var model: MiniLM_V6
 
