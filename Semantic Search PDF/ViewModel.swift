@@ -45,7 +45,6 @@ class ViewModel: ObservableObject {
                     self.hnsw = create_hnsw(5,50,0.3)
                 }
                 let pdfTextWithPosition = self.extractTextWithPosition(from: pdfURL)
-                NSLog("Reset file and cleared everything")
                 self.pdfTextWithPosition = pdfTextWithPosition
             }
             
@@ -198,8 +197,6 @@ class ViewModel: ObservableObject {
             self.isHiddenText = true
     
         }
-        NSLog("Embeddings in ViewModel in local function: \(embeddingsWithPositions.count)")
-        NSLog("Embeddings in ViewModel after setting: \(self.embeddingsWithPositions.count)")
 
         return textWithPositions
     }
@@ -301,14 +298,12 @@ class ViewModel: ObservableObject {
                 knn_search_hnsw(hnsw, buffer.baseAddress, Int32(buffer.count), Int32(topN), resultBuffer.baseAddress)
             }
         }
-        NSLog("Embeddings length \(self.embeddingsWithPositions.count)")
         var matches: [EmbeddingWithPosition] = []
 
         for id in resultIds {
             if id == -1 { continue }
             let index = Int(id)
             if index < self.embeddingsWithPositions.count && index < pdfTextWithPosition.count {
-                NSLog("Added embedding \(index)")
                 let emb = self.embeddingsWithPositions[index]
                 matches.append(emb)
             } else {
