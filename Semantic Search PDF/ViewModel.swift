@@ -51,10 +51,74 @@ class ViewModel: ObservableObject {
         }
     }
 
+//    func tokenizeAndEmbed(textChunks: [TextWithPosition], tokenizer: BertTokenizer, model: MiniLM_V6) -> [EmbeddingWithPosition] {
+//        var embeddingsWithPositions: [EmbeddingWithPosition] = []
+//        let start = DispatchTime.now()
+//        for chunk in textChunks {
+//            DispatchQueue.main.async {
+//                self.indexedPages = chunk.pageNumber
+//            }
+//            let tokenIds = tokenizer.tokenizeToIds(text: chunk.text)
+//            let attentionMask = Array(repeating: 1, count: tokenIds.count)
+//            let tokenTypeIds = Array(repeating: 0, count: tokenIds.count)
+//
+//            guard let inputIdsArray = try? MLMultiArray(shape: [1, NSNumber(value: tokenIds.count)], dataType: .int32),
+//                  let attentionMaskArray = try? MLMultiArray(shape: [1, NSNumber(value: tokenIds.count)], dataType: .int32),
+//                  let tokenTypeIdsArray = try? MLMultiArray(shape: [1, NSNumber(value: tokenIds.count)], dataType: .int32) else {
+//                print("Failed to create MLMultiArray")
+//                continue
+//            }
+//
+//            for (index, tokenId) in tokenIds.enumerated() {
+//                inputIdsArray[index] = NSNumber(value: tokenId)
+//                attentionMaskArray[index] = NSNumber(value: attentionMask[index])
+//                tokenTypeIdsArray[index] = NSNumber(value: tokenTypeIds[index])
+//            }
+//
+//            let input = MiniLM_V6Input(input_ids: inputIdsArray, attention_mask: attentionMaskArray, token_type_ids: tokenTypeIdsArray)
+//
+//            do {
+//                let prediction = try model.prediction(input: input)
+//                let modelOutput = (0..<prediction.Identity.count).map { prediction.Identity[$0].doubleValue }
+//
+//                // Reshape the model output
+//                let embeddingDim = 384 // Assuming MiniLM-L6-v2 with 384 dimensions
+//                let sequenceLength = modelOutput.count / embeddingDim
+//                let reshapedOutput = stride(from: 0, to: modelOutput.count, by: embeddingDim).map {
+//                    Array(modelOutput[$0..<min($0 + embeddingDim, modelOutput.count)])
+//                }
+//
+//                // Perform mean pooling
+//                let pooledEmbedding = meanPooling(reshapedOutput, attentionMask: attentionMask.map { Double($0) })
+//
+//                // Normalize the pooled embedding
+//                let normalizedEmbedding = normalizeEmbedding(pooledEmbedding)
+//
+//                let embeddingWithPosition = EmbeddingWithPosition(embedding: normalizedEmbedding, position: chunk, id : id)
+//                id += 1
+//                
+//                embeddingsWithPositions.append(embeddingWithPosition)
+//
+//            } catch {
+//                print("Failed to get Embeddings: \(error)")
+//            }
+//        }
+//        let end = DispatchTime.now()
+//        let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
+//        let timeInterval = Double(nanoTime) / 1_000_000_000
+//        NSLog("🕒 Batch prediction time: \(timeInterval) seconds")
+//        return embeddingsWithPositions
+//    }
+    
+    
     func tokenizeAndEmbed(textChunks: [TextWithPosition], tokenizer: BertTokenizer, model: MiniLM_V6) -> [EmbeddingWithPosition] {
         var embeddingsWithPositions: [EmbeddingWithPosition] = []
+        var batchInputs: [MiniLM_V6Input] = []
+        let start = DispatchTime.now()
+        var chunkMap: [Int: TextWithPosition] = [:]
+        var localId = id
 
-        for chunk in textChunks {
+        for (index, chunk) in textChunks.enumerated() {
             DispatchQueue.main.async {
                 self.indexedPages = chunk.pageNumber
             }
@@ -68,44 +132,58 @@ class ViewModel: ObservableObject {
                 print("Failed to create MLMultiArray")
                 continue
             }
-
-            for (index, tokenId) in tokenIds.enumerated() {
-                inputIdsArray[index] = NSNumber(value: tokenId)
-                attentionMaskArray[index] = NSNumber(value: attentionMask[index])
-                tokenTypeIdsArray[index] = NSNumber(value: tokenTypeIds[index])
+            
+            for (i, tokenId) in tokenIds.enumerated() {
+                inputIdsArray[i] = NSNumber(value: tokenId)
+                attentionMaskArray[i] = NSNumber(value: attentionMask[i])
+                tokenTypeIdsArray[i] = NSNumber(value: tokenTypeIds[i])
             }
-
+            
             let input = MiniLM_V6Input(input_ids: inputIdsArray, attention_mask: attentionMaskArray, token_type_ids: tokenTypeIdsArray)
+            batchInputs.append(input)
+            chunkMap[batchInputs.count - 1] = chunk
+            
 
-            do {
-                let prediction = try model.prediction(input: input)
-                let modelOutput = (0..<prediction.Identity.count).map { prediction.Identity[$0].doubleValue }
+            
+            
+            if batchInputs.count == 32 || index == textChunks.count - 1 {
+                do {
 
-                // Reshape the model output
-                let embeddingDim = 384 // Assuming MiniLM-L6-v2 with 384 dimensions
-                let sequenceLength = modelOutput.count / embeddingDim
-                let reshapedOutput = stride(from: 0, to: modelOutput.count, by: embeddingDim).map {
-                    Array(modelOutput[$0..<min($0 + embeddingDim, modelOutput.count)])
+                    let batchPredictions = try model.predictions(inputs: batchInputs, options: MLPredictionOptions())
+                    
+                    for (i, output) in batchPredictions.enumerated() {
+                        guard let outputArray = output.featureValue(for: "Identity")?.multiArrayValue else { continue }
+                        let modelOutput = (0..<outputArray.count).map { outputArray[$0].doubleValue }
+                        
+                        let embeddingDim = 384
+                        let reshapedOutput = stride(from: 0, to: modelOutput.count, by: embeddingDim).map {
+                            Array(modelOutput[$0..<min($0 + embeddingDim, modelOutput.count)])
+                        }
+                        let pooled = meanPooling(reshapedOutput, attentionMask: attentionMask.map { Double($0) })
+                        let normalized = normalizeEmbedding(pooled)
+                        
+                        if let chunk = chunkMap[i] {
+                            let emb = EmbeddingWithPosition(embedding: normalized, position: chunk, id: localId)
+                            embeddingsWithPositions.append(emb)
+                            localId += 1
+                        }
+                    }
+                } catch {
+                    print("❌ Batch prediction error: \(error)")
                 }
-
-                // Perform mean pooling
-                let pooledEmbedding = meanPooling(reshapedOutput, attentionMask: attentionMask.map { Double($0) })
-
-                // Normalize the pooled embedding
-                let normalizedEmbedding = normalizeEmbedding(pooledEmbedding)
-
-                let embeddingWithPosition = EmbeddingWithPosition(embedding: normalizedEmbedding, position: chunk, id : id)
-                id += 1
-                
-                embeddingsWithPositions.append(embeddingWithPosition)
-
-            } catch {
-                print("Failed to get Embeddings: \(error)")
+                batchInputs.removeAll()
+                chunkMap.removeAll()
             }
         }
-
+        
+        id = localId
+        let end = DispatchTime.now()
+        let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
+        let timeInterval = Double(nanoTime) / 1_000_000_000
+        NSLog("🕒 Batch prediction time: \(timeInterval) seconds")
         return embeddingsWithPositions
     }
+
 
     func meanPooling(_ modelOutput: [[Double]], attentionMask: [Double]) -> [Double] {
         let embeddingDim = modelOutput[0].count
