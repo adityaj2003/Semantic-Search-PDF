@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C70B80752D8CD1F200525B72 /* hnsw_mmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C70B80712D8CD1F200525B72 /* hnsw_mmap.cpp */; };
+		C70B80762D8CD1F200525B72 /* hnsw_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C70B80732D8CD1F200525B72 /* hnsw_wrapper.cpp */; };
 		C7383AFF2C3DA82600888E7C /* PDFKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7383AFE2C3DA82600888E7C /* PDFKitView.swift */; };
 		C7383B032C3EA95700888E7C /* BERTTokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7383B022C3EA95700888E7C /* BERTTokenizer.swift */; };
 		C77631482C5047E9005017AB /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77631472C5047E9005017AB /* ViewModel.swift */; };
@@ -17,11 +19,19 @@
 		C7833D2F2C3D9565005C66A1 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7833D2E2C3D9565005C66A1 /* SwiftUI.framework */; };
 		C7833D312C3D956D005C66A1 /* CoreML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7833D302C3D956D005C66A1 /* CoreML.framework */; };
 		C7833D332C3D960D005C66A1 /* PDFKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7833D322C3D960D005C66A1 /* PDFKit.framework */; };
+		C7913C972D8CB9D700A4C4ED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7913C962D8CB9D600A4C4ED /* Foundation.framework */; };
+		C7A3A0312D8909EC00DA2C35 /* HNSW.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A3A0302D85F4FF00DA2C35 /* HNSW.swift */; };
 		C7ECFF012C4934D8009E5179 /* MiniLM-V6.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = C7ECFF002C4934D8009E5179 /* MiniLM-V6.mlpackage */; };
 		C7ECFF032C4973E2009E5179 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7ECFF022C4973E2009E5179 /* AppKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C70B80702D8CD1F200525B72 /* hnsw_mmap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = hnsw_mmap.hpp; sourceTree = "<group>"; };
+		C70B80712D8CD1F200525B72 /* hnsw_mmap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = hnsw_mmap.cpp; sourceTree = "<group>"; };
+		C70B80722D8CD1F200525B72 /* hnsw_wrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hnsw_wrapper.h; sourceTree = "<group>"; };
+		C70B80732D8CD1F200525B72 /* hnsw_wrapper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = hnsw_wrapper.cpp; sourceTree = "<group>"; };
+		C70B80742D8CD1F200525B72 /* Semantic Search PDF-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Semantic Search PDF-Bridging-Header.h"; sourceTree = "<group>"; };
+		C70B80772D8DA2BF00525B72 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		C7383AFE2C3DA82600888E7C /* PDFKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFKitView.swift; sourceTree = "<group>"; };
 		C7383B022C3EA95700888E7C /* BERTTokenizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BERTTokenizer.swift; sourceTree = "<group>"; };
 		C77631312C4B9554005017AB /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -36,6 +46,8 @@
 		C7833D2E2C3D9565005C66A1 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		C7833D302C3D956D005C66A1 /* CoreML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreML.framework; path = System/Library/Frameworks/CoreML.framework; sourceTree = SDKROOT; };
 		C7833D322C3D960D005C66A1 /* PDFKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PDFKit.framework; path = System/Library/Frameworks/PDFKit.framework; sourceTree = SDKROOT; };
+		C7913C962D8CB9D600A4C4ED /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		C7A3A0302D85F4FF00DA2C35 /* HNSW.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HNSW.swift; sourceTree = "<group>"; };
 		C7ECFF002C4934D8009E5179 /* MiniLM-V6.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; name = "MiniLM-V6.mlpackage"; path = "../../MiniLM-V6.mlpackage"; sourceTree = "<group>"; };
 		C7ECFF022C4973E2009E5179 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -45,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7913C972D8CB9D700A4C4ED /* Foundation.framework in Frameworks */,
 				C7833D312C3D956D005C66A1 /* CoreML.framework in Frameworks */,
 				C7ECFF032C4973E2009E5179 /* AppKit.framework in Frameworks */,
 				C7833D332C3D960D005C66A1 /* PDFKit.framework in Frameworks */,
@@ -76,7 +89,13 @@
 		C7833D1C2C3D94ED005C66A1 /* Semantic Search PDF */ = {
 			isa = PBXGroup;
 			children = (
+				C70B80772D8DA2BF00525B72 /* module.modulemap */,
 				C7383B022C3EA95700888E7C /* BERTTokenizer.swift */,
+				C70B80702D8CD1F200525B72 /* hnsw_mmap.hpp */,
+				C70B80712D8CD1F200525B72 /* hnsw_mmap.cpp */,
+				C70B80722D8CD1F200525B72 /* hnsw_wrapper.h */,
+				C70B80732D8CD1F200525B72 /* hnsw_wrapper.cpp */,
+				C70B80742D8CD1F200525B72 /* Semantic Search PDF-Bridging-Header.h */,
 				C7833D2C2C3D951D005C66A1 /* Semantic-Search-PDF-Info.plist */,
 				C7833D1D2C3D94ED005C66A1 /* Semantic_Search_PDFApp.swift */,
 				C7ECFF002C4934D8009E5179 /* MiniLM-V6.mlpackage */,
@@ -85,6 +104,7 @@
 				C7833D262C3D94F2005C66A1 /* Semantic_Search_PDF.entitlements */,
 				C7833D232C3D94F2005C66A1 /* Preview Content */,
 				C7383AFE2C3DA82600888E7C /* PDFKitView.swift */,
+				C7A3A0302D85F4FF00DA2C35 /* HNSW.swift */,
 				C77631472C5047E9005017AB /* ViewModel.swift */,
 			);
 			path = "Semantic Search PDF";
@@ -101,6 +121,7 @@
 		C7833D2D2C3D9565005C66A1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C7913C962D8CB9D600A4C4ED /* Foundation.framework */,
 				C7ECFF022C4973E2009E5179 /* AppKit.framework */,
 				C7833D322C3D960D005C66A1 /* PDFKit.framework */,
 				C7833D302C3D956D005C66A1 /* CoreML.framework */,
@@ -181,10 +202,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7383B032C3EA95700888E7C /* BERTTokenizer.swift in Sources */,
+				C70B80752D8CD1F200525B72 /* hnsw_mmap.cpp in Sources */,
+				C70B80762D8CD1F200525B72 /* hnsw_wrapper.cpp in Sources */,
 				C7383AFF2C3DA82600888E7C /* PDFKitView.swift in Sources */,
 				C7833D202C3D94ED005C66A1 /* ContentView.swift in Sources */,
 				C7833D1E2C3D94ED005C66A1 /* Semantic_Search_PDFApp.swift in Sources */,
 				C77631482C5047E9005017AB /* ViewModel.swift in Sources */,
+				C7A3A0312D8909EC00DA2C35 /* HNSW.swift in Sources */,
 				C7ECFF012C4934D8009E5179 /* MiniLM-V6.mlpackage in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -251,6 +275,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OBJC_INTEROP_MODE = objcxx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -307,6 +332,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OBJC_INTEROP_MODE = objcxx;
 			};
 			name = Release;
 		};
@@ -327,6 +353,11 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/**",
+					"$(SRCROOT)/**",
+				);
+				"HEADER_SEARCH_PATHS[arch=*]" = "$(PROJECT_DIR)/**";
 				INFOPLIST_FILE = "Semantic-Search-PDF-Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -336,10 +367,13 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "";
+				"OTHER_LDFLAGS[arch=*]" = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "adityaj2003.Semantic-Search-PDF";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Semantic Search PDF/Semantic Search PDF-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
@@ -362,6 +396,10 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/**",
+					"$(SRCROOT)/**",
+				);
 				INFOPLIST_FILE = "Semantic-Search-PDF-Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -371,10 +409,12 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "adityaj2003.Semantic-Search-PDF";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Semantic Search PDF/Semantic Search PDF-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

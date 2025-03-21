@@ -1,0 +1,4 @@
+module hnsw_mmap {
+  header "hnsw_wrapper.h"
+  requires cplusplus
+}

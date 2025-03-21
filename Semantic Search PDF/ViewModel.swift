@@ -2,6 +2,7 @@ import SwiftUI
 import PDFKit
 import CoreML
 import AppKit
+import hnsw_mmap
 
 @available(macOS 14.0, *)
 class ViewModel: ObservableObject {
@@ -11,12 +12,13 @@ class ViewModel: ObservableObject {
     @Published var pdfTextWithPosition: [TextWithPosition] = []
     @Published var pdfKitView: PDFKitView?
     @Published var topMatches: [EmbeddingWithPosition] = []
-    @Published var centroidMap: [[Double]: [EmbeddingWithPosition]] = [:]
+    @Published var hnsw = create_hnsw(5,50, 0.3)
     @Published var isSearching = false
     @Published var isHidden = true
     @Published var isHiddenText = false
     @Published var searchText = ""
     @Published var indexedPages = 0
+    var id = 0
 
     func handleFileImport(result: Result<URL, Error>) {
         switch result {
@@ -32,21 +34,21 @@ class ViewModel: ObservableObject {
 
     func handleFileChange(newURL: URL?) {
         if let pdfURL = newURL {
-            DispatchQueue.main.async {
-                self.indexedPages = 0
-                self.pdfKitView = PDFKitView(url: pdfURL)
-                self.isHiddenText = false
-            }
-            DispatchQueue.global(qos: .userInteractive).async {
-                let pdfTextWithPosition = self.extractTextWithPosition(from: pdfURL)
+            DispatchQueue.global(qos: .userInitiated).async {
                 DispatchQueue.main.async {
+                    self.indexedPages = 0
+                    self.pdfKitView = PDFKitView(url: pdfURL)
+                    self.isHiddenText = false
                     self.embeddingsWithPositions = []
                     self.pdfTextWithPosition = []
                     self.topMatches = []
-                    self.pdfTextWithPosition = pdfTextWithPosition
-                    self.highlightTopMatches(pdfView: self.pdfKitView?.getView())
+                    self.hnsw = create_hnsw(5,50,0.3)
                 }
+                let pdfTextWithPosition = self.extractTextWithPosition(from: pdfURL)
+                NSLog("Reset file and cleared everything")
+                self.pdfTextWithPosition = pdfTextWithPosition
             }
+            
         }
     }
 
@@ -93,13 +95,16 @@ class ViewModel: ObservableObject {
                 // Normalize the pooled embedding
                 let normalizedEmbedding = normalizeEmbedding(pooledEmbedding)
 
-                let embeddingWithPosition = EmbeddingWithPosition(embedding: normalizedEmbedding, position: chunk)
+                let embeddingWithPosition = EmbeddingWithPosition(embedding: normalizedEmbedding, position: chunk, id : id)
+                id += 1
+                
                 embeddingsWithPositions.append(embeddingWithPosition)
 
             } catch {
                 print("Failed to get Embeddings: \(error)")
             }
         }
+
         return embeddingsWithPositions
     }
 
@@ -152,7 +157,6 @@ class ViewModel: ObservableObject {
                 return sentences
             }
 
-    // Example usage in your extractTextWithPosition function
     func extractTextWithPosition(from url: URL) -> [TextWithPosition] {
         guard let pdfDocument = PDFDocument(url: url) else { return [] }
         var textWithPositions: [TextWithPosition] = []
@@ -185,54 +189,23 @@ class ViewModel: ObservableObject {
             print("Failed to load model")
             return textWithPositions
         }
+
         let embeddingsWithPositions = tokenizeAndEmbed(textChunks: textWithPositions, tokenizer: tokenizer, model: model)
-        let centroidMap = fit(embeddings: embeddingsWithPositions)
-        
+        fit(embeddings: embeddingsWithPositions)
+
         DispatchQueue.main.async {
             self.embeddingsWithPositions = embeddingsWithPositions
-            self.centroidMap = centroidMap
             self.isHiddenText = true
+    
         }
-        
+        NSLog("Embeddings in ViewModel in local function: \(embeddingsWithPositions.count)")
+        NSLog("Embeddings in ViewModel after setting: \(self.embeddingsWithPositions.count)")
+
         return textWithPositions
     }
 
-        
-    func cosineSimilarity(_ vectorA: [Double], _ vectorB: [Double]) -> Double {
-            let dotProduct = zip(vectorA, vectorB).map(*).reduce(0, +)
-            let magnitudeA = sqrt(vectorA.map { $0 * $0 }.reduce(0, +))
-            let magnitudeB = sqrt(vectorB.map { $0 * $0 }.reduce(0, +))
-            return dotProduct / (magnitudeA * magnitudeB)
-        }
-        
-    func findTopNSimilarEmbeddings(queryEmbedding: [Double], topN: Int) -> [EmbeddingWithPosition] {
-                // Find the nearest centroid
-                let centroids = Array(centroidMap.keys)
-                var minCentroid = centroids[0]
-                var minDist = cosineSimilarity(centroids[0], queryEmbedding)
-                for i in 1..<centroids.count {
-                    let dist = cosineSimilarity(queryEmbedding, centroids[i])
-                    if dist < minDist {
-                        minDist = dist
-                        minCentroid = centroids[i]
-                    }
-                }
-                
-                // Get embeddings from the nearest centroid's bucket
-                guard let bucketEmbeddings = centroidMap[minCentroid] else {
-                    print("No embeddings found in the nearest centroid's bucket")
-                    return []
-                }
-                
-                // Calculate similarities within the bucket
-                let similarities = bucketEmbeddings.map { embeddingWithPosition in
-                    return (embeddingWithPosition, cosineSimilarity(queryEmbedding, embeddingWithPosition.embedding))
-                }
-                
-                // Sort and get the top N embeddings
-                let sortedEmbeddings = similarities.sorted { $0.1 > $1.1 }.prefix(topN)
-                return sortedEmbeddings.map { $0.0 }
-            }
+
+    
 
     func highlightSelectedMatch(match: EmbeddingWithPosition, pdfView: PDFView?) {
             guard let pdfView = pdfView,
@@ -250,56 +223,62 @@ class ViewModel: ObservableObject {
             print("Failed to load model")
             return
         }
-        
+
         let tokenIds = tokenizer.tokenizeToIds(text: searchText)
         let attentionMask = Array(repeating: 1, count: tokenIds.count)
         let tokenTypeIds = Array(repeating: 0, count: tokenIds.count)
-        
+
         guard let inputIdsArray = try? MLMultiArray(shape: [1, NSNumber(value: tokenIds.count)], dataType: .int32),
               let attentionMaskArray = try? MLMultiArray(shape: [1, NSNumber(value: tokenIds.count)], dataType: .int32),
               let tokenTypeIdsArray = try? MLMultiArray(shape: [1, NSNumber(value: tokenIds.count)], dataType: .int32) else {
             print("Failed to create MLMultiArray")
             return
         }
-        
+
         for (index, tokenId) in tokenIds.enumerated() {
             inputIdsArray[index] = NSNumber(value: tokenId)
             attentionMaskArray[index] = NSNumber(value: attentionMask[index])
             tokenTypeIdsArray[index] = NSNumber(value: tokenTypeIds[index])
         }
-        
+
         let input = MiniLM_V6Input(input_ids: inputIdsArray, attention_mask: attentionMaskArray, token_type_ids: tokenTypeIdsArray)
-        
+
         do {
             let prediction = try model.prediction(input: input)
             let modelOutput = (0..<prediction.Identity.count).map { prediction.Identity[$0].doubleValue }
-            
-            // Reshape the model output
-            let embeddingDim = 384 // Assuming MiniLM-L6-v2 with 384 dimensions
-            let sequenceLength = modelOutput.count / embeddingDim
+
+            let embeddingDim = 384
             let reshapedOutput = stride(from: 0, to: modelOutput.count, by: embeddingDim).map {
                 Array(modelOutput[$0..<min($0 + embeddingDim, modelOutput.count)])
             }
-            
-            // Apply mean pooling
-            let queryEmbedding = meanPooling(reshapedOutput, attentionMask: attentionMask.map { Double($0) })
-            
-            // Normalize the query embedding
-            let normalizedQueryEmbedding = normalizeEmbedding(queryEmbedding)
-            
-            let matches = findTopNSimilarEmbeddings(queryEmbedding: normalizedQueryEmbedding, topN: 5)
-            
+
+            let pooled = meanPooling(reshapedOutput, attentionMask: attentionMask.map { Double($0) })
+            let normalized = normalizeEmbedding(pooled)
+
             DispatchQueue.main.async {
+                if let document = pdfView?.document {
+                    for pageIndex in 0..<document.pageCount {
+                        if let page = document.page(at: pageIndex) {
+                            let highlightsToRemove = page.annotations.filter { $0.type == "Highlight" }
+                            for annotation in highlightsToRemove {
+                                page.removeAnnotation(annotation)
+                            }
+                        }
+                    }
+                }
+
+                let matches = self.findTopNSimilarEmbeddings(queryEmbedding: normalized, topN: 5)
                 for match in matches {
                     let highlight = PDFAnnotation(bounds: match.position.bounds, forType: .highlight, withProperties: nil)
                     highlight.color = .yellow
-                    
+
                     if let page = pdfView?.document?.page(at: match.position.pageNumber) {
                         page.addAnnotation(highlight)
                     }
                 }
                 self.isHidden = true
                 self.topMatches = matches
+                print("done")
             }
         } catch {
             print("Failed to get prediction: \(error)")
@@ -307,56 +286,53 @@ class ViewModel: ObservableObject {
     }
 
 
-    func fit(embeddings: [EmbeddingWithPosition]) -> [[Double] : [EmbeddingWithPosition]] {
-        var centroids: [[Double]] = (0..<8).map { _ in
-            (0..<embeddings[0].embedding.count).map { _ in
-                Double.random(in: -1...1)
+
+
+
+
+      
+    func findTopNSimilarEmbeddings(queryEmbedding: [Double], topN: Int) -> [EmbeddingWithPosition] {
+
+        let floatQuery = queryEmbedding.map { Float($0) }
+        var resultIds = [Int32](repeating: -1, count: topN)
+
+        floatQuery.withUnsafeBufferPointer { buffer in
+            resultIds.withUnsafeMutableBufferPointer { resultBuffer in
+                knn_search_hnsw(hnsw, buffer.baseAddress, Int32(buffer.count), Int32(topN), resultBuffer.baseAddress)
             }
         }
-        var centroidMap: [[Double] : [EmbeddingWithPosition]] = [:]
-        for iter in 0..<100 {
-            for embedding in embeddings {
-                var minCentroid = centroids[0]
-                var minDist = cosineSimilarity(centroids[0], embedding.embedding)
-                for i in 1..<centroids.count {
-                    let dist = cosineSimilarity(embedding.embedding, centroids[i])
-                    if dist < minDist {
-                        minDist = dist
-                        minCentroid = centroids[i]
-                    }
-                }
-                if var arr = centroidMap[minCentroid] {
-                    arr.append(embedding)
-                    centroidMap[minCentroid] = arr
-                } else {
-                    centroidMap[minCentroid] = [embedding]
-                }
-            }
-            
-            var newCentroids: [[Double]] = []
-            
-            for (centroid, cluster) in centroidMap {
-                var newCentroid = Array(repeating: 0.0, count: centroid.count)
-                for point in cluster {
-                    for j in 0..<point.embedding.count {
-                        newCentroid[j] += point.embedding[j]
-                    }
-                }
-                for j in 0..<newCentroid.count {
-                    newCentroid[j] /= Double(cluster.count)
-                }
-                newCentroids.append(newCentroid)
-            }
-            
-            centroids = newCentroids
-            if iter != 99 {
-                centroidMap.removeAll()
+        NSLog("Embeddings length \(self.embeddingsWithPositions.count)")
+        var matches: [EmbeddingWithPosition] = []
+
+        for id in resultIds {
+            if id == -1 { continue }
+            let index = Int(id)
+            if index < self.embeddingsWithPositions.count && index < pdfTextWithPosition.count {
+                NSLog("Added embedding \(index)")
+                let emb = self.embeddingsWithPositions[index]
+                matches.append(emb)
+            } else {
             }
         }
-        self.centroidMap = centroidMap
-        return centroidMap
+
+        return matches
     }
 
+
+
+
+    func fit(embeddings: [EmbeddingWithPosition]) {
+        NSLog("Embeddings in ViewModel: \(self.embeddingsWithPositions.count)")
+        for embedding in embeddings {
+            let floatVec = embedding.embedding.map { Float($0) }
+            floatVec.withUnsafeBufferPointer { buffer in
+                insert_hnsw(hnsw, buffer.baseAddress, Int32(buffer.count), Int32(embedding.id))
+            }
+        }
+    }
+
+
+    
 
 }
 

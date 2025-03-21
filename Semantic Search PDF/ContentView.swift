@@ -82,14 +82,29 @@ struct ContentView: View {
         }
     }
 }
-struct TextWithPosition {
+struct TextWithPosition: Hashable {
     let text: String
     let pageNumber: Int
     let bounds: CGRect
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(text)
+        hasher.combine(pageNumber)
+        hasher.combine(bounds.origin.x)
+        hasher.combine(bounds.origin.y)
+    }
+
+    static func == (lhs: TextWithPosition, rhs: TextWithPosition) -> Bool {
+        return lhs.pageNumber == rhs.pageNumber &&
+               lhs.text == rhs.text &&
+               lhs.bounds == rhs.bounds
+    }
 }
+
 
 struct EmbeddingWithPosition {
     let embedding: [Double]
     let position: TextWithPosition
+    let id : Int
 }
 
