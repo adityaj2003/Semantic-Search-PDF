@@ -5,8 +5,7 @@ I use the MiniLM_V6 model and the SWIFT BERT_TOKENIZER code by Julien Chaumond t
 #### Features
 * On-Device Processing: All tokenization, embedding fetching, and search operations are performed on the device, ensuring privacy and reducing the need for internet connectivity.
 * Cosine Similarity: This method is used to find the most similar embeddings, providing efficient and accurate search results.
-#### Future Enhancements
-* Optimized Vector Store: Plan to develop an optimized vector store to speed up similarity ranking as the PDF size increases.
-* TF-IDF: Implementing Term Frequency-Inverse Document Frequency (TF-IDF) to improve the relevance of search results.
+* Implemented storing embeddings in HNSW to speed up indexing time by 3x
+* Use batch processing to generate embeddings in CoreML leading to much 2x faster indexing overall for a 400 page pdf
 
 
